@@ -2,8 +2,8 @@ import { HexString, parse } from '@inco/js';
 import { Lightning } from '@inco/js/lite';
 import { baseSepolia } from 'viem/chains';
 import { describe } from 'vitest';
-import { runE2ETest } from './lightning-test.ts';
 import { loadDotEnv } from '../repo.ts';
+import { runE2ETest } from './lightning-test.ts';
 
 describe(`Lightning Base Sepolia E2E`, { timeout: 50_000 }, async () => {
   loadDotEnv();

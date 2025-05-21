@@ -45,7 +45,7 @@ export const addTwoAbi = [
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
-] as const
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SimpleConfidentialToken
@@ -80,4 +80,4 @@ export const simpleConfidentialTokenAbi = [
     outputs: [{ name: 'success', internalType: 'ebool', type: 'bytes32' }],
     stateMutability: 'nonpayable',
   },
-] as const
+] as const;

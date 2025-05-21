@@ -41,28 +41,19 @@ contract MillionaireDilemma {
         ebool isBob = bobGeAlice.and(bobGeEve);
         ebool isEve = isAlice.not().and(isBob.not());
 
-        isAlice.requestDecryption(
-            this.handleResult.selector,
-            abi.encodePacked(uint8(0))
-        );
-        isBob.requestDecryption(
-            this.handleResult.selector,
-            abi.encodePacked(uint8(1))
-        );
-        isEve.requestDecryption(
-            this.handleResult.selector,
-            abi.encodePacked(uint8(2))
-        );
+        isAlice.requestDecryption(this.handleResult.selector, abi.encodePacked(uint8(0)));
+        isBob.requestDecryption(this.handleResult.selector, abi.encodePacked(uint8(1)));
+        isEve.requestDecryption(this.handleResult.selector, abi.encodePacked(uint8(2)));
     }
 
-    function handleResult(
-        uint256,
-        bool result,
-        bytes memory data
-    ) external returns (bool) {
+    function handleResult(uint256, bool result, bytes memory data) external returns (bool) {
         if (result) {
             uint8 idx = abi.decode(data, (uint8));
-            address richest = idx == 0 ? alice : idx == 1 ? bob : eve;
+            address richest = idx == 0
+                ? alice
+                : idx == 1
+                    ? bob
+                    : eve;
             emit Richest(richest);
         }
         return true;
