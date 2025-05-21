@@ -1,17 +1,18 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8;
 
 import {euint256, ebool, e} from "@inco/lightning/src/Lib.sol";
 
 contract MillionaireDilemma {
-    using e for euint256;
-    using e for ebool;
-    using e for bytes;
+    using e for *;
 
     address public immutable alice;
     address public immutable bob;
     address public immutable eve;
 
     mapping(address => euint256) public wealth;
+
+    bool private _emitted;
 
     event Richest(address indexed richest);
 
@@ -32,30 +33,38 @@ contract MillionaireDilemma {
     }
 
     function compare() external {
-        ebool aliceGeBob = wealth[alice].ge(wealth[bob]);
-        ebool aliceGeEve = wealth[alice].ge(wealth[eve]);
-        ebool bobGeAlice = wealth[bob].ge(wealth[alice]);
-        ebool bobGeEve = wealth[bob].ge(wealth[eve]);
+        _emitted = false;
 
-        ebool isAlice = aliceGeBob.and(aliceGeEve);
-        ebool isBob = bobGeAlice.and(bobGeEve);
-        ebool isEve = isAlice.not().and(isBob.not());
+        euint256 idxAlice = e.asEuint256(0);
+        euint256 idxBob = e.asEuint256(1);
+        euint256 idxEve = e.asEuint256(2);
 
-        isAlice.requestDecryption(this.handleResult.selector, abi.encodePacked(uint8(0)));
-        isBob.requestDecryption(this.handleResult.selector, abi.encodePacked(uint8(1)));
-        isEve.requestDecryption(this.handleResult.selector, abi.encodePacked(uint8(2)));
+        euint256 bestWealth = wealth[eve];
+        euint256 bestIdx = idxEve;
+
+        ebool bobGeBest = wealth[bob].ge(bestWealth);
+        bestWealth = bobGeBest.select(wealth[bob], bestWealth);
+        bestIdx = bobGeBest.select(idxBob, bestIdx);
+
+        ebool aliceGeBest = wealth[alice].ge(bestWealth);
+        bestWealth = aliceGeBest.select(wealth[alice], bestWealth);
+        bestIdx = aliceGeBest.select(idxAlice, bestIdx);
+
+        bestIdx.allowThis();
+        bestIdx.requestDecryption(this.handleResult.selector, "");
     }
 
-    function handleResult(uint256, bool result, bytes memory data) external returns (bool) {
-        if (result) {
-            uint8 idx = abi.decode(data, (uint8));
-            address richest = idx == 0
-                ? alice
-                : idx == 1
-                    ? bob
-                    : eve;
-            emit Richest(richest);
-        }
+    function handleResult(uint256, uint256 decryptedIdx, bytes memory) external returns (bool) {
+        if (_emitted) return true;
+
+        address richest = decryptedIdx == 0
+            ? alice
+            : decryptedIdx == 1
+                ? bob
+                : eve;
+
+        emit Richest(richest);
+        _emitted = true;
         return true;
     }
 }

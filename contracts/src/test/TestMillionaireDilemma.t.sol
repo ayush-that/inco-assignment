@@ -29,8 +29,10 @@ contract TestMillionaireDilemma is IncoTest {
         dilemma.submitWealth(fakePrepareEuint256Ciphertext(10));
 
         dilemma.compare();
-        vm.expectEmit(true, false, false, true, address(dilemma));
+
+        vm.expectEmit(true, false, false, false, address(dilemma));
         emit Richest(alice);
+
         processAllOperations();
     }
 
@@ -43,8 +45,10 @@ contract TestMillionaireDilemma is IncoTest {
         dilemma.submitWealth(fakePrepareEuint256Ciphertext(10));
 
         dilemma.compare();
-        vm.expectEmit(true, false, false, true, address(dilemma));
+
+        vm.expectEmit(true, false, false, false, address(dilemma));
         emit Richest(bob);
+
         processAllOperations();
     }
 
@@ -57,8 +61,10 @@ contract TestMillionaireDilemma is IncoTest {
         dilemma.submitWealth(fakePrepareEuint256Ciphertext(100));
 
         dilemma.compare();
-        vm.expectEmit(true, false, false, true, address(dilemma));
+
+        vm.expectEmit(true, false, false, false, address(dilemma));
         emit Richest(eve);
+
         processAllOperations();
     }
 }
