@@ -65,6 +65,13 @@ const WealthSubmission = () => {
     }
   }, [wealthHandle, walletClientData]);
 
+  useEffect(() => {
+    setWealth("");
+    setDecryptedWealth(null);
+    setError("");
+    setSuccess("");
+  }, []);
+
   return (
     <div className="flex items-center justify-center w-full">
       <div className="w-full">

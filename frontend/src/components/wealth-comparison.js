@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { usePublicClient, useReadContract, useWriteContract } from "wagmi";
 import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
-import { Trophy, Crown, Users, AlertCircle, CheckCircle } from "lucide-react";
+import { Trophy, Crown, Users, AlertCircle, CheckCircle, RefreshCw } from "lucide-react";
 import { parseEventLogs } from "viem";
 
-const WealthComparison = () => {
+const WealthComparison = ({ onPlayAgain }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [richestAddress, setRichestAddress] = useState(null);
@@ -198,37 +198,49 @@ const WealthComparison = () => {
               </div>
             )}
 
-            <button
-              onClick={compareWealth}
-              className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={
-                isLoading ||
-                !aliceWealthHandle ||
-                aliceWealthHandle === ZERO_HANDLE ||
-                !bobWealthHandle ||
-                bobWealthHandle === ZERO_HANDLE ||
-                !eveWealthHandle ||
-                eveWealthHandle === ZERO_HANDLE
-              }
-            >
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              ) : (
-                "Compare Wealth"
-              )}
-            </button>
+            <div className="space-y-3">
+              <button
+                onClick={compareWealth}
+                className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={
+                  isLoading ||
+                  !aliceWealthHandle ||
+                  aliceWealthHandle === ZERO_HANDLE ||
+                  !bobWealthHandle ||
+                  bobWealthHandle === ZERO_HANDLE ||
+                  !eveWealthHandle ||
+                  eveWealthHandle === ZERO_HANDLE
+                }
+              >
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                ) : (
+                  "Compare Wealth"
+                )}
+              </button>
 
-            {!isLoading &&
-              (!aliceWealthHandle ||
-                aliceWealthHandle === ZERO_HANDLE ||
-                !bobWealthHandle ||
-                bobWealthHandle === ZERO_HANDLE ||
-                !eveWealthHandle ||
-                eveWealthHandle === ZERO_HANDLE) && (
-                <div className="text-center text-sm text-gray-400 mt-2">
-                  Waiting for all participants to submit their wealth...
-                </div>
+              {richestAddress && (
+                <button
+                  onClick={onPlayAgain}
+                  className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
+                >
+                  <RefreshCw className="mr-2 w-4 h-4" />
+                  Play Again
+                </button>
               )}
+
+              {!isLoading &&
+                (!aliceWealthHandle ||
+                  aliceWealthHandle === ZERO_HANDLE ||
+                  !bobWealthHandle ||
+                  bobWealthHandle === ZERO_HANDLE ||
+                  !eveWealthHandle ||
+                  eveWealthHandle === ZERO_HANDLE) && (
+                  <div className="text-center text-sm text-gray-400 mt-2">
+                    Waiting for all participants to submit their wealth...
+                  </div>
+                )}
+            </div>
           </div>
         </div>
         <p className="font-mono text-center text-xs text-gray-400 mt-2">

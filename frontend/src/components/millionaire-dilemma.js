@@ -3,7 +3,7 @@ import { useAccount, useReadContract } from "wagmi";
 import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
 import WealthSubmission from "./wealth-submission";
 import WealthComparison from "./wealth-comparison";
-import { Ship, AlertCircle, Info } from "lucide-react";
+import { Ship, AlertCircle, Info, RefreshCw } from "lucide-react";
 
 const MillionaireDilemma = () => {
   const [userRole, setUserRole] = useState(null);
@@ -12,6 +12,7 @@ const MillionaireDilemma = () => {
     bob: null,
     eve: null,
   });
+  const [gameKey, setGameKey] = useState(0);
 
   const { address } = useAccount();
 
@@ -57,6 +58,10 @@ const MillionaireDilemma = () => {
 
   const isParticipant = userRole === "Alice" || userRole === "Bob" || userRole === "Eve";
 
+  const handlePlayAgain = () => {
+    setGameKey(prev => prev + 1);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div className="w-full max-w-4xl mb-8">
@@ -80,13 +85,13 @@ const MillionaireDilemma = () => {
 
       {isParticipant ? (
         <div className="grid md:grid-cols-2 place-items-start gap-6 w-full max-w-4xl">
-          <WealthSubmission />
-          <WealthComparison />
+          <WealthSubmission key={`submission-${gameKey}`} />
+          <WealthComparison key={`comparison-${gameKey}`} onPlayAgain={handlePlayAgain} />
         </div>
       ) : (
         <div className="flex justify-center w-full max-w-4xl">
           <div className="w-full max-w-lg">
-            <WealthComparison />
+            <WealthComparison key={`comparison-${gameKey}`} onPlayAgain={handlePlayAgain} />
           </div>
         </div>
       )}
