@@ -59,7 +59,7 @@ const MillionaireDilemma = () => {
   const isParticipant = userRole === "Alice" || userRole === "Bob" || userRole === "Eve";
 
   const handlePlayAgain = () => {
-    setGameKey(prev => prev + 1);
+    setGameKey((prev) => prev + 1);
   };
 
   return (
