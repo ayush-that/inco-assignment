@@ -10,7 +10,6 @@ const EncryptedTokenInterface = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const walletClient = useWalletClient();
@@ -62,7 +61,6 @@ const EncryptedTokenInterface = () => {
 
       await mintcUSDC();
 
-      // Reset form
       setAmount("");
     } catch (err) {
       console.error("Minting error:", err);
@@ -139,9 +137,6 @@ const EncryptedTokenInterface = () => {
             </div>
           </div>
         </div>
-        {/* <p className="font-mono text-sm text-gray-400 mt-4">
-          Only owner of contract can mint the token.
-        </p> */}
       </div>
     </div>
   );

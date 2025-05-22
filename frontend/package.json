@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate:abi": "wagmi generate"
   },
   "dependencies": {
     "@inco/js": "^0.1.32",

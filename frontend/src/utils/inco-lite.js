@@ -5,23 +5,10 @@ export const getConfig = () => {
   return Lightning.latest("testnet", 84532);
 };
 
-/**
- * @example
- * const encryptedValue = await encryptValue({
- *   value: 100,
- *   address: "0x123...",
- *   contractAddress: "0x456..."
- * });
- */
 export const encryptValue = async ({ value, address, contractAddress }) => {
-  // Convert the input value to BigInt for proper encryption
   const valueBigInt = BigInt(value);
-
-  // Format the contract address to checksum format for standardization
   const checksummedAddress = getAddress(contractAddress);
-
   const incoConfig = await getConfig();
-
   const encryptedData = await incoConfig.encrypt(valueBigInt, {
     accountAddress: address,
     dappAddress: checksummedAddress,
@@ -32,15 +19,7 @@ export const encryptValue = async ({ value, address, contractAddress }) => {
   return encryptedData;
 };
 
-/**
- * @example
- * const decryptedValue = await reEncryptValue({
- *   walletClient: yourWalletClient,
- *   handle: encryptionHandle
- * });
- */
 export const reEncryptValue = async ({ walletClient, handle }) => {
-  // Validate that all required parameters are provided
   if (!walletClient || !handle) {
     throw new Error("Missing required parameters for creating reencryptor");
   }
@@ -55,7 +34,6 @@ export const reEncryptValue = async ({ walletClient, handle }) => {
 
     console.log("Decrypted result:", decryptedResult);
 
-    // Optional formatting of the decrypted value
     const decryptedEther = formatUnits(BigInt(decryptedResult.value), 18);
     const formattedValue = parseFloat(decryptedEther).toFixed(0);
 

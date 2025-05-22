@@ -8,18 +8,34 @@ import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { baseSepolia } from "wagmi/chains";
 import { Loader2, AlertTriangle } from "lucide-react";
 
+// Define our local Anvil chain
+const anvil = {
+  id: 31337,
+  name: "Anvil",
+  nativeCurrency: { name: "Anvil Ether", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["http://localhost:8545"] },
+    public: { http: ["http://localhost:8545"] },
+  },
+  blockExplorers: {
+    default: { name: "Etherscan", url: "http://localhost:8545" }, // No real explorer for local
+  },
+  testnet: true,
+};
+
 const projectId = "be36d80bd82aef7bdb958bb467c3e570";
 
 const initializeWeb3Modal = () => {
   try {
     const metadata = {
-      name: "Encrypted Token App",
-      description: "Secure Encrypted Token Management",
-      url: "https://myapp.com",
-      icons: ["https://avatars.githubusercontent.com/u/37784886"],
+      name: "Millionaire\'s Dilemma", // Updated name
+      description: "Who is the richest? A confidential comparison.", // Updated description
+      url: "http://localhost:3000", // Assuming local dev server
+      icons: ["https://avatars.githubusercontent.com/u/37784886"], // Placeholder icon
     };
 
-    const chains = [baseSepolia];
+    // Use our Anvil chain
+    const chains = [anvil];
 
     const wagmiConfig = defaultWagmiConfig({
       chains,
@@ -31,15 +47,15 @@ const initializeWeb3Modal = () => {
       wagmiConfig,
       projectId,
       chains,
-      enableAnalytics: true,
+      enableAnalytics: true, // Can be false for local dev
       themeMode: "dark",
-      chainImages: {
-        [baseSepolia.id]:
-          "https://images.mirror-media.xyz/publication-images/cgqxxPdUFBDjgKna_dDir.png?height=1200&width=1200",
-      },
+      // No specific chain image for Anvil needed, or use a generic one
+      // chainImages: {
+      //   [anvil.id]: \'some_generic_local_icon_url\',
+      // },
     });
 
-    console.log("Web3Modal initialized successfully");
+    console.log("Web3Modal initialized successfully for Anvil");
     return wagmiConfig;
   } catch (error) {
     console.error("Failed to initialize Web3Modal:", error);

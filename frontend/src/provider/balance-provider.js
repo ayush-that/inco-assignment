@@ -19,17 +19,7 @@ export const ChainBalanceProvider = ({ children }) => {
   const walletClient = useWalletClient();
   const chainId = useChainId();
 
-  // Encrypted balance fetch function
   const fetchEncryptedBalance = useCallback(
-    /**
-     * @dev
-     * `wc` refers to the wallet client. Pass this wallet client only if the
-     * wallet client of this component is not accessible.
-     *
-     * This serves as a workaround, primarily needed when calling decryption
-     * immediately after `writeContractAsync`.
-     */
-
     async ({ wc: walletClient }) => {
       if (!address || !publicClient || !walletClient) return;
 
@@ -47,25 +37,15 @@ export const ChainBalanceProvider = ({ children }) => {
 
         const balanceHandle = await encryptedERC20Contract.read.balanceOf([address]);
 
-        if (
-          // indicates balance is not generated yet
-          balanceHandle.toString() === "0x0000000000000000000000000000000000000000000000000000000000000000"
-        ) {
+        if (balanceHandle.toString() === "0x0000000000000000000000000000000000000000000000000000000000000000") {
           setEncryptedBalance(0);
           return;
         }
 
-        // Get the config as per selected chain
         const cfg = getConfig(chainId);
 
         console.log(cfg);
         let decrypted;
-
-        /**
-         * @dev
-         * `reEncryptValue` is a function that takes a handle as input and
-         * returns the decrypted value.
-         */
 
         decrypted = await reEncryptValue({
           chainId: cfg.chainId,

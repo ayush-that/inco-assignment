@@ -31,7 +31,7 @@ const EncryptedSend = () => {
 
     try {
       let parsedAmount = parseEther(amount);
-      // Encrypt the value
+
       const encryptedData = await encryptValue({
         value: parsedAmount,
         address: address,
