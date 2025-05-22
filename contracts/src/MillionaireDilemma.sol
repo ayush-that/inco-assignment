@@ -11,6 +11,7 @@ contract MillionaireDilemma {
     address public immutable eve;
 
     mapping(address => euint256) public wealth;
+    mapping(address => bool) public submitted;
 
     bool private _emitted;
 
@@ -29,11 +30,16 @@ contract MillionaireDilemma {
         );
         euint256 w = encryptedWealth.newEuint256(msg.sender);
         wealth[msg.sender] = w;
+        submitted[msg.sender] = true;
+
+        w.allow(msg.sender);
         w.allowThis();
     }
 
     function compare() external {
-        _emitted = false;
+        require(!_emitted, "MillionaireDilemma: comparison already done");
+
+        require(submitted[alice] && submitted[bob] && submitted[eve], "MillionaireDilemma: submissions missing");
 
         euint256 idxAlice = e.asEuint256(0);
         euint256 idxBob = e.asEuint256(1);

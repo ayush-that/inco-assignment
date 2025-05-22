@@ -204,6 +204,7 @@ const WealthComparison = ({ onPlayAgain }) => {
                 className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={
                   isLoading ||
+                  richestAddress !== null ||
                   !aliceWealthHandle ||
                   aliceWealthHandle === ZERO_HANDLE ||
                   !bobWealthHandle ||
