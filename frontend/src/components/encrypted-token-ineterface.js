@@ -1,15 +1,7 @@
 import React, { useState } from "react";
-import {
-  useAccount,
-  usePublicClient,
-  useWalletClient,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, usePublicClient, useWalletClient, useWriteContract } from "wagmi";
 import { parseEther } from "viem";
-import {
-  ENCRYPTED_ERC20_CONTRACT_ADDRESS,
-  ENCRYPTEDERC20ABI,
-} from "@/utils/contract";
+import { ENCRYPTED_ERC20_CONTRACT_ADDRESS, ENCRYPTEDERC20ABI } from "@/utils/contract";
 import { useChainBalance } from "@/provider/balance-provider";
 import { Lock, Unlock, RefreshCw, CreditCard } from "lucide-react";
 
@@ -23,8 +15,7 @@ const EncryptedTokenInterface = () => {
   const publicClient = usePublicClient();
   const walletClient = useWalletClient();
 
-  const { fetchEncryptedBalance, encryptedBalance, isEncryptedLoading } =
-    useChainBalance();
+  const { fetchEncryptedBalance, encryptedBalance, isEncryptedLoading } = useChainBalance();
 
   const reEncrypt = async () => {
     try {
@@ -96,9 +87,7 @@ const EncryptedTokenInterface = () => {
                 className="text-gray-400 hover:text-white transition-colors"
                 disabled={isEncryptedLoading}
               >
-                <RefreshCw
-                  className={`${isEncryptedLoading ? "animate-spin" : ""}`}
-                />
+                <RefreshCw className={`${isEncryptedLoading ? "animate-spin" : ""}`} />
               </button>
             </div>
 
@@ -107,13 +96,9 @@ const EncryptedTokenInterface = () => {
                 <span className="text-gray-300">Encrypted Balance</span>
                 <div className="flex items-center">
                   {isEncryptedLoading ? (
-                    <span className="text-gray-500 animate-pulse">
-                      Loading...
-                    </span>
+                    <span className="text-gray-500 animate-pulse">Loading...</span>
                   ) : (
-                    <span className="text-white font-semibold">
-                      {encryptedBalance || "0.00"} cUSDC
-                    </span>
+                    <span className="text-white font-semibold">{encryptedBalance || "0.00"} cUSDC</span>
                   )}
                   {encryptedBalance ? (
                     <Lock className="ml-2 text-blue-400 w-4 h-4" />

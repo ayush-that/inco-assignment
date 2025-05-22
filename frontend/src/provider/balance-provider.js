@@ -1,23 +1,9 @@
 "use client";
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
-import {
-  useAccount,
-  usePublicClient,
-  useWalletClient,
-  useChainId,
-} from "wagmi";
+import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
+import { useAccount, usePublicClient, useWalletClient, useChainId } from "wagmi";
 import { getContract } from "viem";
 
-import {
-  ENCRYPTED_ERC20_CONTRACT_ADDRESS,
-  ENCRYPTEDERC20ABI,
-} from "@/utils/contract";
+import { ENCRYPTED_ERC20_CONTRACT_ADDRESS, ENCRYPTEDERC20ABI } from "@/utils/contract";
 
 import { getConfig, reEncryptValue } from "@/utils/inco-lite";
 
@@ -59,14 +45,11 @@ export const ChainBalanceProvider = ({ children }) => {
 
         console.log("Fetching encrypted balance for address:", address);
 
-        const balanceHandle = await encryptedERC20Contract.read.balanceOf([
-          address,
-        ]);
+        const balanceHandle = await encryptedERC20Contract.read.balanceOf([address]);
 
         if (
           // indicates balance is not generated yet
-          balanceHandle.toString() ===
-          "0x0000000000000000000000000000000000000000000000000000000000000000"
+          balanceHandle.toString() === "0x0000000000000000000000000000000000000000000000000000000000000000"
         ) {
           setEncryptedBalance(0);
           return;
@@ -75,7 +58,7 @@ export const ChainBalanceProvider = ({ children }) => {
         // Get the config as per selected chain
         const cfg = getConfig(chainId);
 
-        console.log(cfg)
+        console.log(cfg);
         let decrypted;
 
         /**
@@ -98,7 +81,7 @@ export const ChainBalanceProvider = ({ children }) => {
         setIsEncryptedLoading(false);
       }
     },
-    [address, chainId, publicClient, walletClient]
+    [address, chainId, publicClient, walletClient],
   );
 
   const contextValue = useMemo(
@@ -108,27 +91,16 @@ export const ChainBalanceProvider = ({ children }) => {
       encryptedError,
       fetchEncryptedBalance,
     }),
-    [
-      encryptedBalance,
-      isEncryptedLoading,
-      encryptedError,
-      fetchEncryptedBalance,
-    ]
+    [encryptedBalance, isEncryptedLoading, encryptedError, fetchEncryptedBalance],
   );
 
-  return (
-    <ChainBalanceContext.Provider value={contextValue}>
-      {children}
-    </ChainBalanceContext.Provider>
-  );
+  return <ChainBalanceContext.Provider value={contextValue}>{children}</ChainBalanceContext.Provider>;
 };
 
 export const useChainBalance = () => {
   const context = useContext(ChainBalanceContext);
   if (context === undefined) {
-    throw new Error(
-      "useChainBalance must be used within a ChainBalanceProvider"
-    );
+    throw new Error("useChainBalance must be used within a ChainBalanceProvider");
   }
   return context;
 };

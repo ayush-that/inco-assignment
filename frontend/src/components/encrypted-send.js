@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  useAccount,
-  useChainId,
-  usePublicClient,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, useChainId, usePublicClient, useWriteContract } from "wagmi";
 import { Send, ArrowRight } from "lucide-react";
 import { encryptValue } from "@/utils/inco-lite";
 import { parseEther } from "viem";
@@ -126,9 +121,7 @@ const EncryptedSend = () => {
             />
 
             {error && (
-              <div className="bg-red-900/20 border border-red-500 text-red-400 p-3 rounded-lg text-center">
-                {error}
-              </div>
+              <div className="bg-red-900/20 border border-red-500 text-red-400 p-3 rounded-lg text-center">{error}</div>
             )}
 
             <button

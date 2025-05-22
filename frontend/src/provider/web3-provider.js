@@ -69,15 +69,8 @@ export function Web3Provider({ children, initialState }) {
   const renderLoadingState = () => (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center text-white">
       <div className="text-center">
-        <Loader2
-          className="mx-auto mb-4 animate-spin text-blue-400"
-          size={48}
-        />
-        <p className="text-xl mb-2">
-          {error
-            ? "Wallet Connection Error"
-            : "Initializing Wallet Connection..."}
-        </p>
+        <Loader2 className="mx-auto mb-4 animate-spin text-blue-400" size={48} />
+        <p className="text-xl mb-2">{error ? "Wallet Connection Error" : "Initializing Wallet Connection..."}</p>
         {error && (
           <div className="bg-red-900/20 border border-red-500 text-red-400 p-4 rounded-lg mt-4 flex items-center justify-center">
             <AlertTriangle className="mr-2" />

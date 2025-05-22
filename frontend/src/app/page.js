@@ -93,9 +93,7 @@ export default function Home() {
         ) : (
           <div className="bg-gray-800 border border-gray-700 rounded-xl p-10 text-center shadow-2xl">
             <Wallet className="mx-auto mb-4 w-12 h-12 text-blue-400" />
-            <p className="text-white text-lg mb-4">
-              Connect your wallet to access encrypted tokens
-            </p>
+            <p className="text-white text-lg mb-4">Connect your wallet to access encrypted tokens</p>
             <button
               onClick={handleConnect}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg transition-colors"

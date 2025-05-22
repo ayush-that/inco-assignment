@@ -8,7 +8,9 @@ export default defineConfig([
     plugins: [
       foundry({
         project: "../contracts/",
-        include: ["AddTwo.sol/**", "SimpleConfidentialToken.sol/**"],
+        include: [
+          "MillionaireDilemma.sol/**",
+        ],
       }),
     ],
   },
