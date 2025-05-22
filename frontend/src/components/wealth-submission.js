@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { useAccount, usePublicClient, useWalletClient, useWriteContract } from "wagmi";
+import React, { useState, useEffect } from "react";
+import { useAccount, usePublicClient, useWalletClient, useWriteContract, useReadContract } from "wagmi";
 import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
-import { encryptValue } from "@/utils/inco";
+import { encryptValue, decryptValue } from "@/utils/inco";
 import { Coins, Lock, AlertCircle } from "lucide-react";
 
 const WealthSubmission = () => {
   const [wealth, setWealth] = useState("");
+  const [decryptedWealth, setDecryptedWealth] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -14,6 +15,12 @@ const WealthSubmission = () => {
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { data: walletClientData } = useWalletClient();
+  const { data: wealthHandle } = useReadContract({
+    address: millionaireDilemmaAddress[31337],
+    abi: millionaireDilemmaAbi,
+    functionName: "wealth",
+    args: [address],
+  });
 
   const submitWealthAmount = async () => {
     try {
@@ -41,6 +48,7 @@ const WealthSubmission = () => {
 
       setSuccess("Your wealth has been submitted successfully!");
       setWealth("");
+      setDecryptedWealth(null);
     } catch (err) {
       console.error("Error submitting wealth:", err);
       setError("Failed to submit wealth: " + err.message);
@@ -48,6 +56,14 @@ const WealthSubmission = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (wealthHandle && walletClientData) {
+      decryptValue(wealthHandle, walletClientData)
+        .then((result) => setDecryptedWealth(result.value))
+        .catch((err) => console.error("Error decrypting wealth:", err));
+    }
+  }, [wealthHandle, walletClientData]);
 
   return (
     <div className="flex items-center justify-center w-full">
@@ -88,6 +104,14 @@ const WealthSubmission = () => {
               {success && (
                 <div className="bg-green-900/20 border border-green-500 text-green-400 p-3 rounded-lg text-center">
                   {success}
+                </div>
+              )}
+
+              {decryptedWealth !== null && (
+                <div className="bg-gray-800/30 border border-gray-600 text-white p-3 rounded-lg text-center">
+                  <p>
+                    Your private wealth: <strong>{decryptedWealth}</strong>
+                  </p>
                 </div>
               )}
 

@@ -1,9 +1,7 @@
 import { Lightning } from "@inco/js/lite";
-import { supportedChains } from "@inco/js";
 
 export const getZap = async () => {
-  const chainId = supportedChains.anvil;
-  return Lightning.latest("local", chainId);
+  return Lightning.localNode();
 };
 
 export const encryptValue = async (value, accountAddress, dappAddress) => {

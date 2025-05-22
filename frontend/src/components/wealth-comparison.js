@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useAccount, usePublicClient, useReadContract, useWriteContract } from "wagmi";
+import { usePublicClient, useReadContract, useWriteContract } from "wagmi";
 import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
-import { Trophy, Crown, Users, AlertCircle } from "lucide-react";
+import { Trophy, Crown, Users, AlertCircle, CheckCircle } from "lucide-react";
 import { parseEventLogs } from "viem";
 
 const WealthComparison = () => {
@@ -14,7 +14,6 @@ const WealthComparison = () => {
     eve: null,
   });
 
-  const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
 
@@ -34,6 +33,26 @@ const WealthComparison = () => {
     address: millionaireDilemmaAddress[31337],
     abi: millionaireDilemmaAbi,
     functionName: "eve",
+  });
+
+  const ZERO_HANDLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
+  const { data: aliceWealthHandle } = useReadContract({
+    address: millionaireDilemmaAddress[31337],
+    abi: millionaireDilemmaAbi,
+    functionName: "wealth",
+    args: [aliceAddress],
+  });
+  const { data: bobWealthHandle } = useReadContract({
+    address: millionaireDilemmaAddress[31337],
+    abi: millionaireDilemmaAbi,
+    functionName: "wealth",
+    args: [bobAddress],
+  });
+  const { data: eveWealthHandle } = useReadContract({
+    address: millionaireDilemmaAddress[31337],
+    abi: millionaireDilemmaAbi,
+    functionName: "wealth",
+    args: [eveAddress],
   });
 
   useEffect(() => {
@@ -135,30 +154,28 @@ const WealthComparison = () => {
                 <span className="text-gray-300">Participants</span>
               </div>
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-gray-800 p-2 rounded">
-                  <div className="font-semibold text-white">Alice</div>
-                  <div className="text-xs text-gray-400 truncate">
-                    {participants.alice
-                      ? `${participants.alice.substring(0, 6)}...${participants.alice.substring(participants.alice.length - 4)}`
-                      : "Loading..."}
-                  </div>
-                </div>
-                <div className="bg-gray-800 p-2 rounded">
-                  <div className="font-semibold text-white">Bob</div>
-                  <div className="text-xs text-gray-400 truncate">
-                    {participants.bob
-                      ? `${participants.bob.substring(0, 6)}...${participants.bob.substring(participants.bob.length - 4)}`
-                      : "Loading..."}
-                  </div>
-                </div>
-                <div className="bg-gray-800 p-2 rounded">
-                  <div className="font-semibold text-white">Eve</div>
-                  <div className="text-xs text-gray-400 truncate">
-                    {participants.eve
-                      ? `${participants.eve.substring(0, 6)}...${participants.eve.substring(participants.eve.length - 4)}`
-                      : "Loading..."}
-                  </div>
-                </div>
+                {[
+                  { name: "Alice", addr: participants.alice, handle: aliceWealthHandle },
+                  { name: "Bob", addr: participants.bob, handle: bobWealthHandle },
+                  { name: "Eve", addr: participants.eve, handle: eveWealthHandle },
+                ].map((p) => {
+                  const submitted = p.handle && p.handle !== ZERO_HANDLE;
+                  return (
+                    <div key={p.name} className="bg-gray-800 p-2 rounded flex flex-col items-center">
+                      <div className="flex items-center">
+                        <div className="font-semibold text-white mr-1">{p.name}</div>
+                        {submitted ? (
+                          <CheckCircle className="text-green-400 w-4 h-4" />
+                        ) : (
+                          <AlertCircle className="text-red-400 w-4 h-4" />
+                        )}
+                      </div>
+                      <div className="text-xs text-gray-400 truncate">
+                        {p.addr ? `${p.addr.substring(0, 6)}...${p.addr.substring(p.addr.length - 4)}` : "Loading..."}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -184,7 +201,15 @@ const WealthComparison = () => {
             <button
               onClick={compareWealth}
               className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                !aliceWealthHandle ||
+                aliceWealthHandle === ZERO_HANDLE ||
+                !bobWealthHandle ||
+                bobWealthHandle === ZERO_HANDLE ||
+                !eveWealthHandle ||
+                eveWealthHandle === ZERO_HANDLE
+              }
             >
               {isLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -192,9 +217,23 @@ const WealthComparison = () => {
                 "Compare Wealth"
               )}
             </button>
+
+            {!isLoading &&
+              (!aliceWealthHandle ||
+                aliceWealthHandle === ZERO_HANDLE ||
+                !bobWealthHandle ||
+                bobWealthHandle === ZERO_HANDLE ||
+                !eveWealthHandle ||
+                eveWealthHandle === ZERO_HANDLE) && (
+                <div className="text-center text-sm text-gray-400 mt-2">
+                  Waiting for all participants to submit their wealth...
+                </div>
+              )}
           </div>
         </div>
-        <p className="font-mono text-center text-xs text-gray-400 mt-2">Compares wealth without revealing actual amounts</p>
+        <p className="font-mono text-center text-xs text-gray-400 mt-2">
+          Compares wealth without revealing actual amounts
+        </p>
       </div>
     </div>
   );
