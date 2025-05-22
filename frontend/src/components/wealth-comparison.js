@@ -122,11 +122,11 @@ const WealthComparison = () => {
       <div className="w-full">
         <div className="w-full bg-gray-700/40 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
           <div className="p-6 space-y-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white flex items-center">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center">
                 <Trophy className="mr-3 text-blue-400" />
-                Wealth Comparison
-              </h2>
+                <h2 className="text-2xl font-bold text-white">Wealth Comparison</h2>
+              </div>
             </div>
 
             <div className="bg-gray-700 rounded-lg p-4 mb-4">
@@ -194,7 +194,7 @@ const WealthComparison = () => {
             </button>
           </div>
         </div>
-        <p className="font-mono text-xs text-gray-400 mt-2">Compares wealth without revealing actual amounts</p>
+        <p className="font-mono text-center text-xs text-gray-400 mt-2">Compares wealth without revealing actual amounts</p>
       </div>
     </div>
   );

@@ -12,10 +12,10 @@ const MillionaireDilemma = () => {
     bob: null,
     eve: null,
   });
-  const [wealthSubmitted, setWealthSubmitted] = useState(false);
 
   const { address } = useAccount();
 
+  // Read Alice, Bob, and Eve addresses from the contract
   const { data: aliceAddress } = useReadContract({
     address: millionaireDilemmaAddress[31337],
     abi: millionaireDilemmaAbi,
@@ -32,13 +32,6 @@ const MillionaireDilemma = () => {
     address: millionaireDilemmaAddress[31337],
     abi: millionaireDilemmaAbi,
     functionName: "eve",
-  });
-
-  const { data: userWealth } = useReadContract({
-    address: millionaireDilemmaAddress[31337],
-    abi: millionaireDilemmaAbi,
-    functionName: "wealth",
-    args: [address],
   });
 
   useEffect(() => {
@@ -62,12 +55,7 @@ const MillionaireDilemma = () => {
     }
   }, [address, aliceAddress, bobAddress, eveAddress]);
 
-  useEffect(() => {
-    // Check if user has submitted wealth (if userWealth exists)
-    if (userWealth) {
-      setWealthSubmitted(true);
-    }
-  }, [userWealth]);
+  const isParticipant = userRole === "Alice" || userRole === "Bob" || userRole === "Eve";
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
@@ -90,19 +78,18 @@ const MillionaireDilemma = () => {
         </div>
       </div>
 
-      {userRole === "Observer" && (
-        <div className="w-full max-w-4xl mb-8">
-          <div className="bg-yellow-900/20 border border-yellow-500 text-yellow-400 p-4 rounded-lg text-center flex items-center justify-center">
-            <Info className="mr-2 w-5 h-5" />
-            <p>You're observing the game. Only Alice, Bob, and Eve can participate.</p>
+      {isParticipant ? (
+        <div className="grid md:grid-cols-2 place-items-start gap-6 w-full max-w-4xl">
+          <WealthSubmission />
+          <WealthComparison />
+        </div>
+      ) : (
+        <div className="flex justify-center w-full max-w-4xl">
+          <div className="w-full max-w-lg">
+            <WealthComparison />
           </div>
         </div>
       )}
-
-      <div className="grid md:grid-cols-2 place-items-start gap-6 w-full max-w-4xl">
-        {(userRole === "Alice" || userRole === "Bob" || userRole === "Eve") && <WealthSubmission />}
-        <WealthComparison />
-      </div>
     </div>
   );
 };
