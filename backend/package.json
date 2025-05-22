@@ -1,10 +1,9 @@
 {
-  "name": "@inco/lightning-rod-test",
+  "name": "millionaire-dilemma",
   "license": "Apache-2.0",
   "scripts": {
-    "test:e2e": "bun vitest run src/test/lightning.local.e2e.test.ts",
-    "test:tsc": "tsc --noEmit",
-    "generate:abis": "bun wagmi generate"
+    "test": "bun vitest run src/test/millionaire.local.e2e.test.ts",
+    "abi": "bun wagmi generate"
   },
   "dependencies": {
     "@inco/js": "workspace:*",
