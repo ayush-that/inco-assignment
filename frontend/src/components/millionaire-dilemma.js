@@ -103,18 +103,6 @@ const MillionaireDilemma = () => {
         {(userRole === "Alice" || userRole === "Bob" || userRole === "Eve") && <WealthSubmission />}
         <WealthComparison />
       </div>
-
-      <div className="w-full max-w-4xl mt-8">
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-          <h3 className="text-white font-bold mb-2">How it works:</h3>
-          <ol className="text-gray-300 text-sm space-y-2 list-decimal list-inside pl-2">
-            <li>Each millionaire privately submits their wealth (encrypted).</li>
-            <li>The smart contract privately compares all three values.</li>
-            <li>Only the identity of the richest millionaire is revealed.</li>
-            <li>The actual wealth amounts remain private and are never disclosed.</li>
-          </ol>
-        </div>
-      </div>
     </div>
   );
 };
