@@ -377,3 +377,5 @@ logs
 # Cursor rules
 .cursorrules
 .env.local
+
+.cursor
