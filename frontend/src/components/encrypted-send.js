@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAccount, useChainId, usePublicClient, useWriteContract } from "wagmi";
+import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 import { Send, ArrowRight } from "lucide-react";
 import { encryptValue } from "@/utils/inco-lite";
 import { parseEther } from "viem";

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'VT323';
+  src: url('/fonts/VT323-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: transparent;
   --foreground: #ffffff;
@@ -22,7 +30,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-pixel), monospace;
+  font-family: var(--font-pixel), 'VT323', monospace;
   image-rendering: pixelated;
   overflow-x: hidden;
 }
@@ -205,4 +213,42 @@ h1.font-pixel {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Heart Animation Styles */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart-animation {
+  animation: heartbeat 2s ease-in-out infinite;
+  color: #ff4757;
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+}
+
+.heart-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #ff4757;
+  border-radius: 10px;
+  padding: 10px 20px;
+  backdrop-filter: blur(5px);
 }

@@ -13,19 +13,16 @@ export default function Home() {
   const { open } = useWeb3Modal();
   const { disconnect } = useDisconnect();
   const [mounted, setMounted] = useState(false);
-  const [musicEnabled, setMusicEnabled] = useState(true);
   const [audioPlaying, setAudioPlaying] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setMusicEnabled(isMusicOn());
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
 
     const intervalId = setInterval(() => {
-      setMusicEnabled(isMusicOn());
       setAudioPlaying(isAudioOn());
     }, 1000);
 
@@ -54,9 +51,7 @@ export default function Home() {
 
   const handleToggleMusic = useCallback(() => {
     console.log("Toggle music button clicked");
-    const isEnabled = toggleBackgroundMusic();
-    console.log("Music toggled, new state:", isEnabled);
-    setMusicEnabled(isEnabled);
+    toggleBackgroundMusic();
   }, []);
 
   const getMusicIcon = () => {

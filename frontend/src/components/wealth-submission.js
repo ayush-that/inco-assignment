@@ -1,52 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useAccount, usePublicClient, useWriteContract, useReadContract } from "wagmi";
+import { useAccount, usePublicClient, useWriteContract, useChainId } from "wagmi";
 import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
 import { encryptValue } from "@/utils/inco";
-import { AlertCircle, CheckCircle } from "lucide-react";
 
 const WealthSubmission = () => {
   const [wealth, setWealth] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
-
-  const { data: submittedStatus } = useReadContract({
-    address: millionaireDilemmaAddress[31337],
-    abi: millionaireDilemmaAbi,
-    functionName: "submitted",
-    args: [address],
-  });
-
-  useEffect(() => {
-    if (submittedStatus !== undefined) {
-      setHasSubmitted(submittedStatus);
-      if (submittedStatus) {
-        setSuccess("You have already submitted your wealth!");
-      }
-    }
-  }, [submittedStatus]);
-
-  const validateInput = (value) => {
-    const num = parseFloat(value);
-    if (isNaN(num)) {
-      return "Please enter a valid number";
-    }
-    if (num <= 0) {
-      return "Wealth must be greater than 0";
-    }
-    if (num > Number.MAX_SAFE_INTEGER) {
-      return "Value too large";
-    }
-    if (!Number.isInteger(num)) {
-      return "Please enter a whole number";
-    }
-    return null;
-  };
+  const chainId = useChainId();
 
   const submitWealthAmount = async () => {
     try {
@@ -54,76 +20,35 @@ const WealthSubmission = () => {
       setError("");
       setSuccess("");
 
-      const validationError = validateInput(wealth);
-      if (validationError) {
-        setError(validationError);
-        return;
-      }
-
-      if (hasSubmitted) {
-        setError("You have already submitted your wealth");
-        return;
-      }
-
-      if (!address) {
-        setError("Please connect your wallet first");
-        return;
+      // Get the contract address for the current chain
+      const contractAddress = millionaireDilemmaAddress[chainId];
+      if (!contractAddress || contractAddress === "0x0000000000000000000000000000000000000000") {
+        throw new Error(`Contract not deployed on chain ${chainId}. Please switch to a supported network.`);
       }
 
       const wealthAmount = parseInt(wealth);
+      const ciphertext = await encryptValue(wealthAmount, address, contractAddress, chainId);
 
-      let ciphertext;
-      try {
-        ciphertext = await encryptValue(wealthAmount, address, millionaireDilemmaAddress[31337]);
-      } catch (encryptError) {
-        console.error("Encryption failed:", encryptError);
-        setError("Failed to encrypt wealth value. Please try again.");
-        return;
-      }
+      const txHash = await writeContractAsync({
+        address: contractAddress,
+        abi: millionaireDilemmaAbi,
+        functionName: "submitWealth",
+        args: [ciphertext],
+      });
 
-      let txHash;
-      try {
-        txHash = await writeContractAsync({
-          address: millionaireDilemmaAddress[31337],
-          abi: millionaireDilemmaAbi,
-          functionName: "submitWealth",
-          args: [ciphertext],
-        });
-      } catch (contractError) {
-        console.error("Contract call failed:", contractError);
-        if (contractError.message.includes("unauthorized participant")) {
-          setError("You are not authorized to participate in this comparison");
-        } else if (contractError.message.includes("rejected")) {
-          setError("Transaction was rejected by user");
-        } else {
-          setError("Failed to submit to contract: " + contractError.message);
-        }
-        return;
-      }
-
-      let tx;
-      try {
-        tx = await publicClient.waitForTransactionReceipt({
-          hash: txHash,
-          timeout: 60000,
-        });
-      } catch (receiptError) {
-        console.error("Transaction receipt error:", receiptError);
-        setError("Transaction failed or timed out. Please check your transaction status.");
-        return;
-      }
+      const tx = await publicClient.waitForTransactionReceipt({
+        hash: txHash,
+      });
 
       if (tx.status !== "success") {
-        setError("Transaction failed. Please try again.");
-        return;
+        throw new Error("Transaction failed");
       }
 
       setSuccess("Your wealth has been submitted successfully!");
       setWealth("");
-      setHasSubmitted(true);
     } catch (err) {
-      console.error("Unexpected error submitting wealth:", err);
-      setError("An unexpected error occurred: " + (err.message || "Please try again"));
+      console.error("Error submitting wealth:", err);
+      setError("Failed to submit wealth: " + err.message);
     } finally {
       setIsLoading(false);
     }
@@ -132,10 +57,8 @@ const WealthSubmission = () => {
   useEffect(() => {
     setWealth("");
     setError("");
-    if (!hasSubmitted) {
-      setSuccess("");
-    }
-  }, [hasSubmitted]);
+    setSuccess("");
+  }, []);
 
   return (
     <div className="flex items-center justify-center w-full h-full">
@@ -151,35 +74,23 @@ const WealthSubmission = () => {
               <div className="relative">
                 <input
                   type="number"
-                  placeholder="Enter Wealth (e.g., 1000000)"
+                  placeholder="Enter Wealth"
                   value={wealth}
-                  onChange={(e) => {
-                    setWealth(e.target.value);
-                    setError("");
-                  }}
+                  onChange={(e) => setWealth(e.target.value)}
                   className="w-full p-3 bg-blue-900/80 text-white rounded-lg border border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-blue-300/50 font-pixel text-lg"
-                  disabled={isLoading || hasSubmitted}
-                  min="1"
-                  step="1"
+                  disabled={isLoading}
                 />
-                {hasSubmitted && (
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                    <CheckCircle className="text-green-400 w-5 h-5" />
-                  </div>
-                )}
               </div>
 
               {error && (
                 <div className="bg-red-900/30 border border-red-500 text-red-400 p-3 rounded-lg text-center flex items-center justify-center">
-                  <AlertCircle className="mr-2 w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{error}</span>
+                  {error}
                 </div>
               )}
 
               {success && (
-                <div className="bg-green-900/30 border border-green-500 text-green-400 p-3 rounded-lg text-center flex items-center justify-center">
-                  <CheckCircle className="mr-2 w-4 h-4 flex-shrink-0" />
-                  <span className="text-sm">{success}</span>
+                <div className="bg-green-900/30 border border-green-500 text-green-400 p-3 rounded-lg text-center">
+                  {success}
                 </div>
               )}
 
@@ -187,15 +98,10 @@ const WealthSubmission = () => {
                 <button
                   onClick={submitWealthAmount}
                   className="w-full p-3 text-white rounded-lg hover:bg-blue-500 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed font-pixel btn-gradient"
-                  disabled={!wealth || Number(wealth) <= 0 || isLoading || hasSubmitted || validateInput(wealth)}
+                  disabled={!wealth || Number(wealth) <= 0 || isLoading}
                 >
                   {isLoading ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  ) : hasSubmitted ? (
-                    <span className="flex items-center justify-center text-center">
-                      <CheckCircle className="mr-2 w-4 h-4" />
-                      WEALTH SUBMITTED
-                    </span>
                   ) : (
                     <span className="flex items-center justify-center text-center">SUBMIT ENCRYPTED WEALTH</span>
                   )}

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useAccount, useReadContract } from "wagmi";
-import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
+import { useAccount } from "wagmi";
+import {
+  useReadMillionaireDilemmaAlice,
+  useReadMillionaireDilemmaBob,
+  useReadMillionaireDilemmaEve,
+} from "@/generated";
 import WealthSubmission from "./wealth-submission";
 import WealthComparison from "./wealth-comparison";
 import Image from "next/image";
@@ -8,26 +12,10 @@ import Image from "next/image";
 const MillionaireDilemma = () => {
   const [userRole, setUserRole] = useState(null);
   const [gameKey, setGameKey] = useState(0);
-
   const { address } = useAccount();
-
-  const { data: aliceAddress } = useReadContract({
-    address: millionaireDilemmaAddress[31337],
-    abi: millionaireDilemmaAbi,
-    functionName: "alice",
-  });
-
-  const { data: bobAddress } = useReadContract({
-    address: millionaireDilemmaAddress[31337],
-    abi: millionaireDilemmaAbi,
-    functionName: "bob",
-  });
-
-  const { data: eveAddress } = useReadContract({
-    address: millionaireDilemmaAddress[31337],
-    abi: millionaireDilemmaAbi,
-    functionName: "eve",
-  });
+  const { data: aliceAddress } = useReadMillionaireDilemmaAlice();
+  const { data: bobAddress } = useReadMillionaireDilemmaBob();
+  const { data: eveAddress } = useReadMillionaireDilemmaEve();
 
   useEffect(() => {
     if (aliceAddress && bobAddress && eveAddress) {

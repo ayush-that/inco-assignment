@@ -18,7 +18,7 @@ module.exports = {
         "success-light": "#7FE8A6",
       },
       fontFamily: {
-        pixel: ["var(--font-pixel)", "monospace"],
+        pixel: ["var(--font-pixel)", "VT323", "monospace"],
       },
       animation: {
         float: "float 3s ease-in-out infinite",

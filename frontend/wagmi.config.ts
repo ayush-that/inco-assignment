@@ -1,7 +1,7 @@
 import { defineConfig } from '@wagmi/cli';
 import { foundry } from '@wagmi/cli/plugins';
 
-const contractAddress = '0x7ef8E99980Da5bcEDcF7C10f41E55f759F6A174B';
+const contractAddress = '0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d';
 const chainId = 31337;
 
 export default defineConfig({

@@ -1,22 +1,19 @@
-import { Press_Start_2P, VT323 } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Web3Provider } from "@/provider/web3-provider";
 import { ChainBalanceProvider } from "@/provider/balance-provider";
 import SoundProvider from "@/components/sound-provider";
 
-// Pixel fonts from Google Fonts
-const pixelFont = Press_Start_2P({
-  weight: ["400"],
-  subsets: ["latin"],
-  display: "swap",
+const P2PFont = localFont({
+  src: "../../public/fonts/PressStart2P-Regular.ttf",
   variable: "--font-pixel",
+  display: "swap",
 });
 
-const secondaryPixelFont = VT323({
-  weight: ["400"],
-  subsets: ["latin"],
-  display: "swap",
+const secondaryPixelFont = localFont({
+  src: "../../public/fonts/VT323-Regular.ttf",
   variable: "--font-pixel-secondary",
+  display: "swap",
 });
 
 export const metadata = {
@@ -28,7 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${pixelFont.variable} ${secondaryPixelFont.variable} font-pixel antialiased`}
+        className={`${P2PFont.variable} ${secondaryPixelFont.variable} font-pixel antialiased`}
         style={{
           backgroundImage: "url('/background.png')",
           backgroundSize: "cover",
