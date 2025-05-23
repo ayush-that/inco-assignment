@@ -6,7 +6,7 @@ import { useDisconnect } from "wagmi";
 import { useEffect, useState, useCallback } from "react";
 import MillionaireDilemma from "@/components/millionaire-dilemma";
 import Image from "next/image";
-import { toggleBackgroundMusic, isMusicOn, isAudioOn } from "@/utils/sound";
+import { toggleBackgroundMusic, isAudioOn } from "@/utils/sound";
 
 export default function Home() {
   const { isConnected, address } = useAccount();
