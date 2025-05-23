@@ -373,9 +373,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions or support:
 
-- 📧 **Email**: [your-email@example.com]
-- 💬 **Discord**: [Your Discord]
-- 🐦 **Twitter**: [@your-twitter]
+- 📧 **Email**: [ayush1337@hotmail.com]
+- 🐦 **Twitter**: [@shydev69]
 
 ---
 
