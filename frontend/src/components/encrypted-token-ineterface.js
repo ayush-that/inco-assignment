@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAccount, usePublicClient, useWalletClient, useWriteContract } from "wagmi";
+import { usePublicClient, useWalletClient, useWriteContract } from "wagmi";
 import { parseEther } from "viem";
 import { ENCRYPTED_ERC20_CONTRACT_ADDRESS, ENCRYPTEDERC20ABI } from "@/utils/contract";
 import { useChainBalance } from "@/provider/balance-provider";

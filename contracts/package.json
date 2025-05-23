@@ -1,6 +1,10 @@
 {
   "name": "lightning-rod-contracts",
   "private": true,
+  "scripts": {
+    "compile": "forge compile",
+    "test": "forge test"
+  },
   "dependencies": {
     "@inco/lightning": "^0.1.21",
     "@inco/shared": "^0.1.0",

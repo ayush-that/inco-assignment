@@ -3,20 +3,14 @@ import { useAccount, useReadContract } from "wagmi";
 import { millionaireDilemmaAddress, millionaireDilemmaAbi } from "@/generated";
 import WealthSubmission from "./wealth-submission";
 import WealthComparison from "./wealth-comparison";
-import { Ship, AlertCircle, Info, RefreshCw } from "lucide-react";
+import Image from "next/image";
 
 const MillionaireDilemma = () => {
   const [userRole, setUserRole] = useState(null);
-  const [participants, setParticipants] = useState({
-    alice: null,
-    bob: null,
-    eve: null,
-  });
   const [gameKey, setGameKey] = useState(0);
 
   const { address } = useAccount();
 
-  // Read Alice, Bob, and Eve addresses from the contract
   const { data: aliceAddress } = useReadContract({
     address: millionaireDilemmaAddress[31337],
     abi: millionaireDilemmaAbi,
@@ -37,13 +31,6 @@ const MillionaireDilemma = () => {
 
   useEffect(() => {
     if (aliceAddress && bobAddress && eveAddress) {
-      setParticipants({
-        alice: aliceAddress,
-        bob: bobAddress,
-        eve: eveAddress,
-      });
-
-      // Determine the user's role
       if (address === aliceAddress) {
         setUserRole("Alice");
       } else if (address === bobAddress) {
@@ -63,36 +50,55 @@ const MillionaireDilemma = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full">
-      <div className="w-full max-w-4xl mb-8">
-        <div className="bg-blue-900/20 border border-blue-500 text-blue-400 p-4 rounded-lg text-center flex flex-col items-center justify-center">
-          <div className="flex items-center mb-2">
-            <Ship className="mr-2 w-6 h-6" />
-            <h1 className="text-2xl font-bold">Millionaire's Dilemma: Yacht Edition</h1>
+    <div className="flex flex-col items-center justify-center w-full relative">
+      <div className="w-full max-w-4xl mb-6 relative">
+        <div className="bg-blue-950/70 border-2 border-blue-600/50 rounded-lg p-4 text-center flex flex-col items-center justify-center relative overflow-hidden">
+          <div
+            className="absolute inset-0 bg-shimmer-gradient animate-shimmer"
+            style={{ backgroundSize: "200% 100%" }}
+          ></div>
+          <div className="relative z-10">
+            <p className="text-sm text-blue-200 mb-3 font-pixel-secondary">
+              Alice, Bob, and Eve want to figure out who's the richest without revealing their wealth to each other.
+            </p>
+            {userRole && (
+              <div className="mt-1 inline-block">
+                <span className="bg-blue-900/70 px-6 py-1 rounded-lg text-sm text-accent font-pixel border border-accent/50">
+                  YOU ARE: <strong className="text-white">{userRole}</strong>
+                </span>
+              </div>
+            )}
           </div>
-          <p className="text-sm">
-            Alice, Bob, and Eve want to figure out who's the richest without revealing their wealth to each other.
-          </p>
-          {userRole && (
-            <div className="mt-3 bg-blue-800/30 px-4 py-2 rounded-full text-sm">
-              <span>
-                You are playing as: <strong>{userRole}</strong>
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
       {isParticipant ? (
         <div className="grid md:grid-cols-2 place-items-start gap-6 w-full max-w-4xl">
-          <WealthSubmission key={`submission-${gameKey}`} />
-          <WealthComparison key={`comparison-${gameKey}`} onPlayAgain={handlePlayAgain} />
+          <div className="w-full h-full">
+            <WealthSubmission key={`submission-${gameKey}`} />
+          </div>
+          <div className="w-full h-full">
+            <WealthComparison key={`comparison-${gameKey}`} onPlayAgain={handlePlayAgain} />
+          </div>
         </div>
       ) : (
         <div className="flex justify-center w-full max-w-4xl">
           <div className="w-full max-w-lg">
             <WealthComparison key={`comparison-${gameKey}`} onPlayAgain={handlePlayAgain} />
           </div>
+        </div>
+      )}
+
+      {userRole && (
+        <div className="fixed right-10 bottom-5 z-10 flex flex-col items-center">
+          <div>
+            <Image src="/dialog.png" alt="Dialog" width={300} height={200} priority />
+          </div>
+          {userRole === "Observer" ? (
+            <Image src="/man.png" alt="Observer" width={200} height={300} priority />
+          ) : (
+            <Image src={`/${userRole.toLowerCase()}.png`} alt={userRole} width={200} height={300} priority />
+          )}
         </div>
       )}
     </div>

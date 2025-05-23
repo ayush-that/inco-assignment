@@ -20,7 +20,7 @@ function getEnv(key: string): string {
   return value;
 }
 
-describe('MillionaireDilemma Local E2E', { timeout: 120_000 }, () => {
+describe('MillionaireDilemma Local E2E', () => {
   loadDotEnv();
   const zap = Lightning.localNode();
   const cfg: E2EConfig = { chainRpcUrl: 'http://127.0.0.1:8545' };
@@ -121,7 +121,7 @@ describe('MillionaireDilemma Local E2E', { timeout: 120_000 }, () => {
 
     console.log('Comparing wealth values...');
     await aliceDapp.write.compare();
-  });
+  }, 120_000);
 
   it('should emit the richest participant', async () => {
     const dapp = getContract({
@@ -154,5 +154,5 @@ describe('MillionaireDilemma Local E2E', { timeout: 120_000 }, () => {
     const sortedWealths = [...wealths].sort((a, b) => (a.val > b.val ? -1 : 1));
 
     expect(richestEvent).toBe(sortedWealths[0]?.addr || '0x');
-  });
+  }, 30_000);
 });

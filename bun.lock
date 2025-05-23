@@ -17,7 +17,7 @@
       },
     },
     "backend": {
-      "name": "@inco/lightning-rod-test",
+      "name": "millionaire-dilemma",
       "dependencies": {
         "@inco/js": "workspace:*",
         "viem": "^2.28.0",
@@ -139,8 +139,6 @@
     "@inco/js": ["@inco/js@0.1.33", "", { "dependencies": { "@bufbuild/protobuf": "^2.2.3", "@connectrpc/connect": "^2.0.0", "@connectrpc/connect-node": "^2.0.0", "@connectrpc/connect-web": "^2.0.1", "@cosmjs/proto-signing": "^0.32.4", "@cosmjs/stargate": "^0.32.4", "@cosmjs/tendermint-rpc": "^0.32.4", "@grpc/grpc-js": "^1.12.2", "@types/elliptic": "^6.4.18", "@wagmi/cli": "^2.2.0", "bincode-ts": "^0.1.1", "ecies-geth": "^1.7.5", "effect": "^3.13.6", "sha3": "^2.1.4", "viem": "^2.23.6" } }, "sha512-K+0roA7sEXKpz7qy7+/HkexUm7MuNXnp98TFSglessA7K2YkrywrEoKZEHXi+nNdpLE0i73FgUaLOqitp7wiMw=="],
 
     "@inco/lightning": ["@inco/lightning@0.1.30", "", { "dependencies": { "@inco/shared": "^0.1.0", "@openzeppelin/contracts": "^5.2.0", "@openzeppelin/contracts-upgradeable": "^5.2.0", "ds-test": "https://github.com/dapphub/ds-test", "forge-std": "https://github.com/foundry-rs/forge-std", "tsx": "^4.19.3" } }, "sha512-KyNo+9muUegR+/tDF7UFifem4sumXZIRTeIvCGpfSd2CldcjkCoG+dqvf+Vwh9li7GS7q5dDZpM/W1JSkcbr2g=="],
-
-    "@inco/lightning-rod-test": ["@inco/lightning-rod-test@workspace:backend"],
 
     "@inco/shared": ["@inco/shared@0.1.0", "", { "dependencies": { "@openzeppelin/contracts": "^5.2.0", "ds-test": "https://github.com/dapphub/ds-test", "forge-std": "https://github.com/foundry-rs/forge-std" } }, "sha512-Yw4KnTCGJPMGlWFq1JEpuadoNYFEXA+TObwNsR2Tq9ICgf0iVksSYatqiUeHaB1/J9Vyo5obZOKsU92Oieacog=="],
 
@@ -419,6 +417,8 @@
     "magic-string": ["magic-string@0.30.17", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0" } }, "sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA=="],
 
     "math-intrinsics": ["math-intrinsics@1.1.0", "", {}, "sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g=="],
+
+    "millionaire-dilemma": ["millionaire-dilemma@workspace:backend"],
 
     "mime-db": ["mime-db@1.52.0", "", {}, "sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg=="],
 
