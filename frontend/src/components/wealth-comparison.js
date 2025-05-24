@@ -5,7 +5,6 @@ import { parseEventLogs } from "viem";
 import Image from "next/image";
 import { RefreshCw } from "lucide-react";
 
-
 const WealthComparison = ({ onPlayAgain }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");

@@ -13,10 +13,13 @@ const MillionaireDilemma = () => {
   const [userRole, setUserRole] = useState(null);
   const [gameKey, setGameKey] = useState(0);
   const { address } = useAccount();
+
+  // read the addresses of the participants
   const { data: aliceAddress } = useReadMillionaireDilemmaAlice();
   const { data: bobAddress } = useReadMillionaireDilemmaBob();
   const { data: eveAddress } = useReadMillionaireDilemmaEve();
 
+  // set the user role based on the address
   useEffect(() => {
     if (aliceAddress && bobAddress && eveAddress) {
       if (address === aliceAddress) {
@@ -31,8 +34,10 @@ const MillionaireDilemma = () => {
     }
   }, [address, aliceAddress, bobAddress, eveAddress]);
 
+  // check if the user is a participant
   const isParticipant = userRole === "Alice" || userRole === "Bob" || userRole === "Eve";
 
+  // handle play again event
   const handlePlayAgain = () => {
     setGameKey((prev) => prev + 1);
   };

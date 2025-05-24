@@ -14,6 +14,7 @@ const WealthSubmission = () => {
   const publicClient = usePublicClient();
   const chainId = useChainId();
 
+  // submit wealth amount
   const submitWealthAmount = async () => {
     try {
       setIsLoading(true);

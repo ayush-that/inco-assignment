@@ -13,6 +13,7 @@ contract TestMillionaireDilemma is IncoTest {
         dilemma = new MillionaireDilemma(alice, bob, eve);
     }
 
+    // test unauthorized participant
     function testSubmitWealthUnauthorized() public {
         vm.prank(dave);
         bytes memory ciphertext = fakePrepareEuint256Ciphertext(100);
@@ -20,6 +21,7 @@ contract TestMillionaireDilemma is IncoTest {
         dilemma.submitWealth(ciphertext);
     }
 
+    // test alice is richest
     function testAliceIsRichest() public {
         vm.prank(alice);
         dilemma.submitWealth(fakePrepareEuint256Ciphertext(100));
@@ -36,6 +38,7 @@ contract TestMillionaireDilemma is IncoTest {
         processAllOperations();
     }
 
+    // test bob is richest
     function testBobIsRichest() public {
         vm.prank(alice);
         dilemma.submitWealth(fakePrepareEuint256Ciphertext(50));
@@ -52,6 +55,7 @@ contract TestMillionaireDilemma is IncoTest {
         processAllOperations();
     }
 
+    // test eve is richest
     function testEveIsRichest() public {
         vm.prank(alice);
         dilemma.submitWealth(fakePrepareEuint256Ciphertext(50));
