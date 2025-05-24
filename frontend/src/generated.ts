@@ -78,7 +78,7 @@ export const millionaireDilemmaAbi = [
 ] as const;
 
 export const millionaireDilemmaAddress = {
-  31337: '0x5fbdb2315678afecb367f032d93f642f64180aa3', // Local network
+  31337: '0x9a676e781a523b5d0c0e43731313a708cb607508', // Local network
 } as const;
 
 export const millionaireDilemmaConfig = { address: millionaireDilemmaAddress, abi: millionaireDilemmaAbi } as const;
