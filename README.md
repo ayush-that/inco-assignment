@@ -1,10 +1,9 @@
 # 🚤 Yao's Millionaire's Problem (Yacht Edition)
 Alice, Bob, and Eve are millionaires who want to figure out who's the richest without revealing their wealth to each other or anyone else.
 
-## 🎯 **Local Setup**
+Watch the demo on [YouTube](https://youtu.be/Nq3isZTK1gA?si=1bnN5_MZADi9a38Z).
 
-
-
+## **Local Setup**
 
 ```bash
 https://github.com/ayush-that/inco-assignment.git
@@ -42,3 +41,23 @@ sudo chmod +x start.sh
 ./start.sh
 ```
 
+## **Running e2e Tests**
+
+In the backend folder, you have to set the following environment variables -
+
+```
+ALICE_PRIV_KEY=
+BOB_PRIV_KEY=
+EVE_PRIV_KEY=
+ALICE_WEALTH=50
+BOB_WEALTH=100
+EVE_WEALTH=20
+```
+
+After this, you can run the `millionaire.local.e2e.test.ts` with the following commands -
+
+```bash
+cd backend
+bun install
+bun test
+```
