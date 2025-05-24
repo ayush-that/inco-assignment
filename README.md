@@ -49,9 +49,9 @@ In the backend folder, you have to set the following environment variables -
 ALICE_PRIV_KEY=
 BOB_PRIV_KEY=
 EVE_PRIV_KEY=
-ALICE_WEALTH=50
-BOB_WEALTH=100
-EVE_WEALTH=20
+ALICE_WEALTH=
+BOB_WEALTH=
+EVE_WEALTH=
 ```
 
 After this, you can run the `millionaire.local.e2e.test.ts` with the following commands -
