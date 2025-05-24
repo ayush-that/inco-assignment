@@ -31,12 +31,10 @@ contract MillionaireDilemma {
             msg.sender == alice || msg.sender == bob || msg.sender == eve,
             "MillionaireDilemma: unauthorized participant" // unauthorized participant
         );
-        // convert encrypted bytes to euint256 handle
+
         euint256 w = encryptedWealth.newEuint256(msg.sender);
-        // store the encrypted wealth value
-        wealth[msg.sender] = w;
-        // mark participant as having submitted
-        submitted[msg.sender] = true;
+        wealth[msg.sender] = w; // store the encrypted wealth value
+        submitted[msg.sender] = true; // mark as submitted
 
         // grant access permissions for the encrypted value
         w.allow(msg.sender);

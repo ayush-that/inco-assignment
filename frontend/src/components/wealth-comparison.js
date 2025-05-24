@@ -71,6 +71,7 @@ const WealthComparison = ({ onPlayAgain }) => {
   useEffect(() => {
     if (!publicClient) return;
 
+    // watch for the Richest event
     const unwatch = publicClient.watchContractEvent({
       address: millionaireDilemmaAddress[31337],
       abi: millionaireDilemmaAbi,
